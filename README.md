@@ -17,6 +17,18 @@ Fully Homomorphic Encryption (FHE) enables computations on encrypted data withou
 - This code introduces a custom trait, ParallelHomomorphicOps, which enables parallel operations on FheUint64 encrypted values.
 - It wraps the logic for parallel addition, making it more accessible and convenient for the user.
 - Users can now perform parallel homomorphic operations without needing to manually handle the parallelism each time.
+## Explanation of the Code:
+- **ParallelHomomorphicOps Trait:**
+   - This trait encapsulates a parallel addition operation, so any type that implements it can do parallel homomorphic adds. It is intended to be generic, allowing it to be readily expanded to accommodate other operations such as multiplication or subtraction in the future.
+- **Parallel Addition Implementation:**
+   - The parallel_add method adds another vector of encrypted values (other) to the invoking object (self). The addition is done in parallel, with Rayon's into_par_iter() for parallel iteration and map for processing each element.
+- **Usage in the Main Function:**
+   - In the parallel_encryption_addition function, encrypted values are added using the newly created parallel_add method. This demonstrates how the trait can be used to improve current functionality using parallelism.
+## Integration into TFHE Library:
+- To integrate this directly into the TFHE library, you would need to:
+   - Modify the FheUint64 type (and other similar types) to implement this ParallelHomomorphicOps trait directly within the library.
+   - Provide a similar parallelized implementation for all relevant operations (not just addition).
+   - Ensure that this parallelism is optional or configurable, as some users might prefer single-threaded operations due to the overhead of parallel processing.
 ## Requirements
 - **Rust:** Ensure you have the latest stable version of Rust installed.
 - **Rust version:** a minimum Rust version of $1.73$ is required to compile TFHE-rs.
